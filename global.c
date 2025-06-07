@@ -2,8 +2,8 @@
 
 // 遊戲常數
 const double FPS = 60.0;
-const int WIDTH = 1280;
-const int HEIGHT = 800;
+const int WIDTH = 900;
+const int HEIGHT = 672;
 
 int window = 0;
 bool key_state[ALLEGRO_KEY_MAX] = {false};
