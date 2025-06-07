@@ -26,11 +26,7 @@ Scene *New_GameScene(int label)
     //_Register_elements(pObj, New_Teleport(Teleport_L));
     //_Register_elements(pObj, New_Tree(Tree_L));
     //_Register_elements(pObj, New_Character(Character_L));
-    for(i=3;i<9;i++){
-        for(j=4;j<9;j++){
-            _Register_elements(pObj, New_Bead(Bead_L, i, j));
-        }
-    }
+   Generate_Bead_Grid(pObj);
     _Register_elements(pObj, New_Boss1(Boss1_L));
     _Register_elements(pObj, New_DamageInput(DamageInput_L));
     _Register_elements(pObj, New_BlackLine(BlackLine_L));
@@ -40,6 +36,9 @@ Scene *New_GameScene(int label)
     pObj->Destroy = game_scene_destroy;
     return pObj;
 }
+
+
+
 void game_scene_update(Scene *self)
 {
     // update every element
