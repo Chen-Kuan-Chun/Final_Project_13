@@ -35,7 +35,7 @@ Elements *New_Character(int label)
     pDerivedObj->width = pDerivedObj->gif_status[0]->width;
     pDerivedObj->height = pDerivedObj->gif_status[0]->height;
     pDerivedObj->x = 300;
-    pDerivedObj->y = HEIGHT - pDerivedObj->height - 60;
+    pDerivedObj->y = HEIGHT - pDerivedObj->height - 400;
     pDerivedObj->hitbox = New_Rectangle(pDerivedObj->x,
                                         pDerivedObj->y,
                                         pDerivedObj->x + pDerivedObj->width,

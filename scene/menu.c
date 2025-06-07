@@ -13,7 +13,7 @@ Scene *New_Menu(int label)
     Menu *pDerivedObj = (Menu *)malloc(sizeof(Menu));
     Scene *pObj = New_Scene(label);
     // setting derived object member
-    pDerivedObj->font = al_load_ttf_font("assets/font/pirulen.ttf", 12, 0);
+    pDerivedObj->font = al_load_ttf_font("assets/font/pirulen.ttf", 6, 0);
     // Load sound
     pDerivedObj->song = al_load_sample("assets/sound/menu.mp3");
     al_reserve_samples(20);
