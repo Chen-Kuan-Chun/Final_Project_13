@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-
+//
 ALLEGRO_BITMAP *bead_imgs[NUM_BEAD_TYPES];
 Bead* bead_grid[GRID_ROWS][GRID_COLS] = {NULL};
 Bead* dragging_bead = NULL;
