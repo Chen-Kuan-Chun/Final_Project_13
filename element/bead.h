@@ -13,10 +13,12 @@ typedef struct _Scene Scene;
 
 typedef struct _Bead {
     float x, y, w, h;
-    ALLEGRO_BITMAP *img; // 圖片
+    int type;
+    int row, col;          // ✅ 加上這兩行
+    ALLEGRO_BITMAP *img;
     Shape *hitbox;
-    int type;            // 0~3 對應哪一張圖
 } Bead;
+
 
 // Bead 函式
 Elements *New_Bead(int label, int col, int row, int type);
