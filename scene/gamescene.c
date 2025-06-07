@@ -6,21 +6,28 @@
 #include "../element/teleport.h"
 #include "../element/tree.h"
 #include "../element/projectile.h"
+#include "../element/bead.h"
 /*
    [GameScene function]
 */
 Scene *New_GameScene(int label)
 {
+    int i, j;
     GameScene *pDerivedObj = (GameScene *)malloc(sizeof(GameScene));
     Scene *pObj = New_Scene(label);
     // setting derived object member
     pDerivedObj->background = al_load_bitmap("assets/image/stage.jpg");
     pObj->pDerivedObj = pDerivedObj;
     // register element
-    _Register_elements(pObj, New_Floor(Floor_L));
-    _Register_elements(pObj, New_Teleport(Teleport_L));
-    _Register_elements(pObj, New_Tree(Tree_L));
-    _Register_elements(pObj, New_Character(Character_L));
+    //_Register_elements(pObj, New_Floor(Floor_L));
+    //_Register_elements(pObj, New_Teleport(Teleport_L));
+    //_Register_elements(pObj, New_Tree(Tree_L));
+    //_Register_elements(pObj, New_Character(Character_L));
+    for(i=3;i<9;i++){
+        for(j=4;j<9;j++){
+            _Register_elements(pObj, New_Bead(Bead_L, i, j));
+        }
+    }
     // setting derived object function
     pObj->Update = game_scene_update;
     pObj->Draw = game_scene_draw;
