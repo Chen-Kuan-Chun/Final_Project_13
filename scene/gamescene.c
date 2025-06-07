@@ -7,6 +7,9 @@
 #include "../element/tree.h"
 #include "../element/projectile.h"
 #include "../element/bead.h"
+#include "../element/boss_1.h"
+#include "../element/damage.h"
+#include "../element/black_line.h"
 /*
    [GameScene function]
 */
@@ -28,6 +31,9 @@ Scene *New_GameScene(int label)
             _Register_elements(pObj, New_Bead(Bead_L, i, j));
         }
     }
+    _Register_elements(pObj, New_Boss1(Boss1_L));
+    _Register_elements(pObj, New_DamageInput(DamageInput_L));
+    _Register_elements(pObj, New_BlackLine(BlackLine_L));
     // setting derived object function
     pObj->Update = game_scene_update;
     pObj->Draw = game_scene_draw;
