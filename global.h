@@ -21,7 +21,8 @@ extern const double FPS;
 extern const int WIDTH;
 extern const int HEIGHT;
 extern int window;
-extern int TIME;
+extern int ROUND;
+
 
 // 鍵盤與滑鼠狀態
 extern bool key_state[ALLEGRO_KEY_MAX];

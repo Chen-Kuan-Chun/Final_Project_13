@@ -20,7 +20,7 @@ Scene *New_GameScene(int label)
     Scene *pObj = New_Scene(label);
     // setting derived object member
     pDerivedObj->background = al_load_bitmap("assets/image/stage.jpg");       // 5秒限制
-
+    pDerivedObj->font1 = al_load_ttf_font("assets/font/DIN Condensed Bold.ttf", 28, 0);
     pObj->pDerivedObj = pDerivedObj;
     // register element
     //_Register_elements(pObj, New_Floor(Floor_L));
@@ -76,6 +76,10 @@ void game_scene_draw(Scene *self)
         Elements *ele = allEle.arr[i];
         ele->Draw(ele);
     }
+    al_draw_text(gs->font1, al_map_rgb(255, 255, 255), 80, 100, ALLEGRO_ALIGN_LEFT, "R O U N D :");
+    snprintf(gs->round_str, sizeof(gs->round_str), "%d", ROUND);
+    al_draw_text(gs->font1, al_map_rgb(255, 255, 255), 170, 100, ALLEGRO_ALIGN_LEFT, gs->round_str);
+    al_draw_text(gs->font1, al_map_rgb(255, 0, 0), 500, 200, ALLEGRO_ALIGN_LEFT, "3");
 }
 void game_scene_destroy(Scene *self)
 {

@@ -147,6 +147,7 @@ void Bead_update(Elements *self) {
         move_bead_to(dragging_bead, last_grid_row, last_grid_col);
         dragging_bead = NULL;
         b->click = false;
+        ROUND++;
     }
     mouse_was_down = mouse_down;
 }
@@ -163,7 +164,7 @@ void Bead_draw(Elements *self) {
         0
     );
     if((obj->now - obj->bead_start_time < 5) && obj->click){
-        al_draw_filled_rectangle(240, 290, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 305, al_map_rgb(205, 255, 100));
+        al_draw_filled_rectangle(240, 290, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 305, al_map_rgb(55, 255, 100));
     }
 }
 

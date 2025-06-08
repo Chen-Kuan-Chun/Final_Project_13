@@ -18,5 +18,5 @@ bool debug_mode = false;
 // ✅ 滑鼠狀態初始化
 int global_mouse_x = 0;
 int global_mouse_y = 0;
+int ROUND = 1;
 bool global_mouse_down = false;
-int TIME = 0;

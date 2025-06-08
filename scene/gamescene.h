@@ -1,6 +1,8 @@
 #ifndef GAMESCENE_H_INCLUDED
 #define GAMESCENE_H_INCLUDED
 #include "scene.h"
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 /*
    [game scene object]
@@ -22,6 +24,8 @@ typedef struct _GameScene
 {
     ALLEGRO_BITMAP *background;
     bool bead_stop;
+    ALLEGRO_FONT *font1;
+    char round_str[20];
 
 } GameScene;
 Scene *New_GameScene(int label);
