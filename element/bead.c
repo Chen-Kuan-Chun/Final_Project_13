@@ -31,6 +31,7 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->y = get_grid_cy(row);
     pDerivedObj->w = 67;
     pDerivedObj->h = 67;
+    pDerivedObj->round = 0;
     pDerivedObj->type = type;
     pDerivedObj->click = false;
     pDerivedObj->img = bead_imgs[type];
@@ -150,6 +151,12 @@ void Bead_update(Elements *self) {
         ROUND++;
     }
     mouse_was_down = mouse_down;
+    if(mouse_down && 240 < mstate.x && mstate.x < 290 && 225 < mstate.y && mstate.y < 290){
+        b->bead_time_limit = 7.0;
+        b->round = ROUND;
+    }else if(b->round == (ROUND - 1)){
+        b->bead_time_limit = 5.0;
+    }
 }
 
 
@@ -163,9 +170,10 @@ void Bead_draw(Elements *self) {
         obj->x, obj->y, obj->w, obj->h,
         0
     );
+    al_draw_filled_rectangle(240, 225, 290, 275, al_map_rgb(100, 100, 100));
     if((obj->now - obj->bead_start_time < 5) && obj->click){
         al_draw_filled_rectangle(240, 275, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 290, al_map_rgb(55, 255, 100));
-    }else{
+    }else if((ROUND-1)/3 <= 4){
         al_draw_filled_rectangle(240, 290, 640 - ((ROUND-1)/3)*100, 305, al_map_rgb(255, 192, 203));
     }
 }
