@@ -2,6 +2,7 @@
     "files.associations": {
         "projectile.h": "c",
         "allegro.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "allegro_primitives.h": "c"
     }
 }
