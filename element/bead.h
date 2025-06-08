@@ -16,6 +16,8 @@ typedef struct _Bead {
     int type;
     int row, col;          // ✅ 加上這兩行
     int round;
+    int recovery;
+    bool recovery_add;
     ALLEGRO_BITMAP *img;
     Shape *hitbox;
     double bead_start_time;  // 轉珠開始的時間點

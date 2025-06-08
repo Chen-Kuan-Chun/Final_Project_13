@@ -32,6 +32,8 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->w = 67;
     pDerivedObj->h = 67;
     pDerivedObj->round = 0;
+    pDerivedObj->recovery = 0;
+    pDerivedObj->recovery_add = false;
     pDerivedObj->type = type;
     pDerivedObj->click = false;
     pDerivedObj->img = bead_imgs[type];
@@ -123,6 +125,7 @@ void Bead_update(Elements *self) {
         dragging_bead->x = mstate.x;
         dragging_bead->y = mstate.y;
         b->click = true;
+        b->recovery_add = false;
 
         int new_col = (mstate.x - 230 + 36) / 72;
         int new_row = (mstate.y - 300 + 36) / 72;
@@ -157,6 +160,10 @@ void Bead_update(Elements *self) {
     }else if(b->round == (ROUND - 1)){
         b->bead_time_limit = 5.0;
     }
+    if(mouse_down && 240 < mstate.x && mstate.x < 290 && 225 < mstate.y && mstate.y < 290 && !b->recovery_add){
+        b->recovery ++;
+        b->recovery_add = true;
+    }
 }
 
 
@@ -173,8 +180,8 @@ void Bead_draw(Elements *self) {
     al_draw_filled_rectangle(240, 225, 290, 275, al_map_rgb(100, 100, 100));
     if((obj->now - obj->bead_start_time < 5) && obj->click){
         al_draw_filled_rectangle(240, 275, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 290, al_map_rgb(55, 255, 100));
-    }else if((ROUND-1)/3 <= 4){
-        al_draw_filled_rectangle(240, 290, 640 - ((ROUND-1)/3)*100, 305, al_map_rgb(255, 192, 203));
+    }if(((ROUND-1)/3 - obj->recovery) <= 4){
+        al_draw_filled_rectangle(240, 290, 640 - ((ROUND-1)/3 - obj->recovery)*100, 305, al_map_rgb(255, 192, 203));
     }
 }
 
