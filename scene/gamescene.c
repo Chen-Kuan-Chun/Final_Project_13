@@ -11,6 +11,8 @@
 #include "../element/damage.h"
 #include "../element/black_line.h"
 #include "../element/count_points.h"
+#include "../shapes/Rectangle.h"
+#include "../shapes/Shape.h"
 /*
    [GameScene function]
 */
@@ -79,7 +81,8 @@ void game_scene_draw(Scene *self)
     al_draw_text(gs->font1, al_map_rgb(255, 255, 255), 80, 100, ALLEGRO_ALIGN_LEFT, "R O U N D :");
     snprintf(gs->round_str, sizeof(gs->round_str), "%d", ROUND);
     al_draw_text(gs->font1, al_map_rgb(255, 255, 255), 170, 100, ALLEGRO_ALIGN_LEFT, gs->round_str);
-    al_draw_text(gs->font1, al_map_rgb(255, 0, 0), 500, 200, ALLEGRO_ALIGN_LEFT, "3");
+    snprintf(gs->boss_round_str, sizeof(gs->round_str), "%d", 3 - (ROUND-1)%3);
+    al_draw_text(gs->font1, al_map_rgb(255, 0, 0), 500, 200, ALLEGRO_ALIGN_LEFT, gs->boss_round_str);
 }
 void game_scene_destroy(Scene *self)
 {

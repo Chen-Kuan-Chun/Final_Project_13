@@ -34,7 +34,7 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->type = type;
     pDerivedObj->click = false;
     pDerivedObj->img = bead_imgs[type];
-    pDerivedObj->bead_start_time = al_get_time();  // 轉珠開始的時間
+    pDerivedObj->bead_start_time = al_get_time() - 5;  // 轉珠開始的時間
     pDerivedObj->bead_time_limit = 5.0;     
     pDerivedObj->now = al_get_time();
     pObj->pDerivedObj = pDerivedObj;
@@ -164,7 +164,9 @@ void Bead_draw(Elements *self) {
         0
     );
     if((obj->now - obj->bead_start_time < 5) && obj->click){
-        al_draw_filled_rectangle(240, 290, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 305, al_map_rgb(55, 255, 100));
+        al_draw_filled_rectangle(240, 275, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 290, al_map_rgb(55, 255, 100));
+    }else{
+        al_draw_filled_rectangle(240, 290, 640 - ((ROUND-1)/3)*100, 305, al_map_rgb(255, 192, 203));
     }
 }
 

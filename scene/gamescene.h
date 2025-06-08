@@ -26,6 +26,7 @@ typedef struct _GameScene
     bool bead_stop;
     ALLEGRO_FONT *font1;
     char round_str[20];
+    char boss_round_str[20];
 
 } GameScene;
 Scene *New_GameScene(int label);
