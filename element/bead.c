@@ -36,7 +36,7 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->recovery_add = false;
     pDerivedObj->type = type;
     pDerivedObj->click = false;
-    pDerivedObj->img = bead_imgs[type];
+    pDerivedObj->img = bead_imgs[pDerivedObj->type];
     pDerivedObj->bead_start_time = al_get_time() - 5;  // 轉珠開始的時間
     pDerivedObj->bead_time_limit = 5.0;     
     pDerivedObj->now = al_get_time();
@@ -163,6 +163,9 @@ void Bead_update(Elements *self) {
     if(mouse_down && 240 < mstate.x && mstate.x < 290 && 225 < mstate.y && mstate.y < 290 && !b->recovery_add){
         b->recovery ++;
         b->recovery_add = true;
+        if(b->type == 1){
+        b->img = bead_imgs[2];
+    }
     }
 }
 
