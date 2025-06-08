@@ -1,6 +1,9 @@
 #include "sceneManager.h"
 #include "menu.h"
 #include "gamescene.h"
+#include "defeat.h" 
+#include "victory.h"
+
 Scene *scene = NULL;
 void create_scene(SceneType type)
 {
@@ -12,6 +15,13 @@ void create_scene(SceneType type)
     case GameScene_L:
         scene = New_GameScene(GameScene_L);
         break;
+    case Defeat_L: 
+        scene = New_Defeat(Defeat_L);
+        break;
+    case Victory_L: 
+        scene = New_Victory(Victory_L);
+        break;
+
     default:
         break;
     }

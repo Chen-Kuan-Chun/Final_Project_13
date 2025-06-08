@@ -1,10 +1,12 @@
 #include "boss_1.h"
 #include "../scene/gamescene.h"
+#include "../scene/sceneManager.h"
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <stdio.h>
+extern void switch_scene(SceneType);
 
 /* -------------- helpers ------------------------------------------------ */
 static void ensure_gfx(void)
@@ -97,4 +99,8 @@ void Boss1_take_damage(Elements *self,int dmg)
 {
     Boss1 *b = self->pDerivedObj;
     if ((b->hp -= dmg) <= 0) self->dele = true;
+    if (b->hp <= 0) {
+        create_scene(Victory_L);
+        return;
+    }
 }

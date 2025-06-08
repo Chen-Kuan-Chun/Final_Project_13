@@ -5,7 +5,9 @@ extern Scene *scene;
 typedef enum SceneType
 {
     Menu_L = 0,
-    GameScene_L
+    GameScene_L,
+    Defeat_L,
+    Victory_L
 } SceneType;
 void create_scene(SceneType);
 
