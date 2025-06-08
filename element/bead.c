@@ -3,7 +3,10 @@
 #include "../global.h"
 #include "../scene/gamescene.h"  
 #include "../scene/sceneManager.h"
+#include "../shapes/Rectangle.h"
+#include "../shapes/Shape.h"
 #include <allegro5/allegro_image.h>
+#include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro.h>
 #include <stdlib.h>
 #include <time.h>
@@ -29,6 +32,7 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->w = 67;
     pDerivedObj->h = 67;
     pDerivedObj->type = type;
+    pDerivedObj->click = false;
     pDerivedObj->img = bead_imgs[type];
     pDerivedObj->bead_start_time = al_get_time();  // 轉珠開始的時間
     pDerivedObj->bead_time_limit = 5.0;     
@@ -117,6 +121,7 @@ void Bead_update(Elements *self) {
         // printf("[Dragging] Bead at x=%d y=%d\n", mstate.x, mstate.y);
         dragging_bead->x = mstate.x;
         dragging_bead->y = mstate.y;
+        b->click = true;
 
         int new_col = (mstate.x - 230 + 36) / 72;
         int new_row = (mstate.y - 300 + 36) / 72;
@@ -136,10 +141,12 @@ void Bead_update(Elements *self) {
     // 拖曳結束，滑鼠放開
     }else if (b->now - b->bead_start_time < b->bead_time_limit) {
         mouse_down = false;
+        b->click = false;
     }else if (!mouse_down && dragging_bead) {
         // printf("[Release] Bead dropped at grid[%d][%d]\n", last_grid_row, last_grid_col);
         move_bead_to(dragging_bead, last_grid_row, last_grid_col);
         dragging_bead = NULL;
+        b->click = false;
     }
     mouse_was_down = mouse_down;
 }
@@ -155,9 +162,9 @@ void Bead_draw(Elements *self) {
         obj->x, obj->y, obj->w, obj->h,
         0
     );
-    /*if(obj->now - obj->bead_start_time < 5){
-        al_draw_filled_rectangle(100, 100, 300, 200, al_map_rgb(205, 255, 100));
-    }*/
+    if((obj->now - obj->bead_start_time < 5) && obj->click){
+        al_draw_filled_rectangle(240, 290, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 305, al_map_rgb(205, 255, 100));
+    }
 }
 
 void Bead_destory(Elements *self) {

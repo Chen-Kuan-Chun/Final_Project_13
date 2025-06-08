@@ -20,6 +20,7 @@ typedef struct _Bead {
     double bead_start_time;  // 轉珠開始的時間點
     double bead_time_limit;  // 轉珠限制秒數，比如5秒
     double now;
+    bool click;
 } Bead;
 
 
