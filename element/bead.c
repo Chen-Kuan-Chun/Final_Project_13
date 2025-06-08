@@ -41,7 +41,7 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->recovery_add = false;
     pDerivedObj->type = type;
     pDerivedObj->click = false;
-    pDerivedObj->img = bead_imgs[pDerivedObj->type];
+    pDerivedObj->img = bead_imgs[type];
     pDerivedObj->bead_start_time = al_get_time() - 5;  // 轉珠開始的時間
     pDerivedObj->bead_time_limit = 5.0;     
     pDerivedObj->now = al_get_time();
@@ -60,31 +60,39 @@ Elements *New_Bead(int label, int col, int row, int type) {
 }
 
 void Generate_Bead_Grid(Scene *scene) {
-    srand(time(NULL));
+    srand(time(NULL));//把目前的累積時間當作亂數
 
     for (int i = 0; i < NUM_BEAD_TYPES; i++) {
         char path[50];
         sprintf(path, "assets/image/bead%d.png", i + 1);
         bead_imgs[i] = al_load_bitmap(path);
         GAME_ASSERT(bead_imgs[i], "Failed to load %s", path);
-    }
+    }//自動載入每一種珠子圖檔，根據編號 1～N 對應檔案名 bead1.png～beadN.png，確保每個類型的珠子有對應的圖可以顯示，若圖片找不到會立刻報錯退出，避免 NULL 崩潰
 
     for (int r = 0; r < GRID_ROWS; r++) {
         for (int c = 0; c < GRID_COLS; c++) {
             int type = rand() % NUM_BEAD_TYPES;
-            Elements *bead = New_Bead(Bead_L, c, r, type);
-            _Register_elements(scene, bead);
+            Elements *bead = New_Bead(Bead_L, c, r, type);//rand()%int(定植)，0~定值這表示從 0 到 n - 1 之間隨機取一個整數值，
+            //若想要k~2，則可以增加平移量 rand() % NUM_BEAD_TYPES *+2*
+            _Register_elements(scene, bead);//意思就是把某個 Elements 物件（例如 Bead）加到場景的元素清單中。for (int r = 0; r < 5; r++) {如果你不用這個架構會怎樣？你就要手動這樣做
+  /*for (int c = 0; c < 6; c++) {
+    if (bead_grid[r][c])
+      Draw_Bead(bead_grid[r][c]);*/
+
+
         }
     }
 }
+
+
 
 void move_bead_to(Bead* b, int row, int col) {
     b->row = row;
     b->col = col;
     b->x = get_grid_cx(col);
-    b->y = get_grid_cy(row);
+    b->y = get_grid_cy(row);//更新珠子「實際在畫面上的 pixel 座標」這樣之後 Draw_Bead(b) 才會畫在正確格子的中心
     bead_grid[row][col] = b;
-}
+}//bead_grid[r][c]	快速查出這一格是哪顆珠子（或空的）b->row / b->col	珠子自己知道它在哪格b->x / b->y	珠子畫出來的實際像素位置（畫面上哪裡）
 
 void Bead_update(Elements *self) {
     Bead *b = (Bead *)(self->pDerivedObj);
@@ -92,67 +100,77 @@ void Bead_update(Elements *self) {
     ALLEGRO_MOUSE_STATE mstate;
     al_get_mouse_state(&mstate);
 
-    bool mouse_down = al_mouse_button_down(&mstate, 1);
+    bool mouse_down = al_mouse_button_down(&mstate, 1);//if1表示滑鼠有點左鍵
     b->now = al_get_time();
 
-    // 印出滑鼠狀態
-    // printf("[Mouse] x=%d y=%d down=%d\n", mstate.x, mstate.y, mouse_down);
 
     // 滑鼠按下、剛開始拖曳
     if (mouse_down && !mouse_was_down && dragging_bead == NULL ) {
-        
-        printf("[Info] Mouse down, check which bead is clicked.\n");
+        //mousewasdown是上一貞是否按左鍵 if沒按但此貞按了就可以 「如果這一幀是 剛剛 按下左鍵，並且你目前沒在拖珠子，才進入拖曳模式」
         for (int r = 0; r < GRID_ROWS; r++) {
             for (int c = 0; c < GRID_COLS; c++) {
                 Bead* target = bead_grid[r][c];
                 if (target) {
                     float dx = fabs(mstate.x - target->x);
                     float dy = fabs(mstate.y - target->y);
-                    // printf(" - Check bead[%d][%d]: x=%.1f y=%.1f dx=%.1f dy=%.1f\n", r, c, target->x, target->y, dx, dy);
 
                     if (dx < 30 && dy < 30) {
                         dragging_bead = target;
-                        dragging_row = r;
+                        dragging_row =  r;
                         dragging_col = c;
                         last_grid_row = r;
-                        last_grid_col = c;
+                        last_grid_col = c;//滑鼠剛點的時候記的
                         b->bead_start_time = al_get_time();
-                        // printf("[Success] Drag start on bead[%d][%d]\n", r, c);
+                        
                         return;
                     }
                 }
             }
         }
-    }
-    // 正在拖曳
+    /*偵測是否「剛按下滑鼠左鍵」	mouse_down && !mouse_was_down
+找出滑鼠點到哪顆珠子	用 fabs() 比對滑鼠與珠子位置
+記錄拖曳狀態與起始格子	dragging_bead = target 等等
+記錄開始拖曳的時間（可動畫）	bead_start_time = al_get_time()*/
+
+}
+    // 正在拖曳且在時限內
     else if (mouse_down && dragging_bead && (b->now - b->bead_start_time < b->bead_time_limit)) {
-        // printf("[Dragging] Bead at x=%d y=%d\n", mstate.x, mstate.y);
+        
         dragging_bead->x = mstate.x;
         dragging_bead->y = mstate.y;
         b->click = true;
         b->recovery_add = false;
-
         int new_col = (mstate.x - 230 + 36) / 72;
         int new_row = (mstate.y - 300 + 36) / 72;
-
+        
+//這裡是把滑鼠的 pixel 位置 ➜ 轉成盤面格子座標：
         if (new_row >= 0 && new_row < GRID_ROWS && new_col >= 0 && new_col < GRID_COLS &&
-            (new_row != last_grid_row || new_col != last_grid_col)) {
-            Bead* target = bead_grid[new_row][new_col];
-            if (target && target != dragging_bead) {
-                printf("[Swap] Bead at [%d][%d] <--> [%d][%d]\n", dragging_row, dragging_col, new_row, new_col);
-                move_bead_to(target, last_grid_row, last_grid_col);
-                bead_grid[dragging_row][dragging_col] = NULL;
-                last_grid_row = new_row;
-                last_grid_col = new_col;
-                bead_grid[new_row][new_col] = dragging_bead;
-            }
+            (new_row != last_grid_row || new_col != last_grid_col)) //只要滑鼠移動到新的格子中心，才會進行交換（避免重複交換同一格）//且不會讀到記憶體未定義區域（陣列越界）
+            {
+            Bead* target = bead_grid[new_row][new_col];//確認這格有珠子，而且不是自己（不能跟自己換）
+     if (target && target != dragging_bead) {
+    // 先讓 target 移到原本拖曳珠的位置
+    move_bead_to(target, dragging_row, dragging_col);
+
+    // 再更新 dragging_bead 到新的格子
+    move_bead_to(dragging_bead, new_row, new_col);
+
+    // 更新拖曳紀錄
+    last_grid_row = new_row;
+    last_grid_col = new_col;
+    dragging_row = new_row;
+    dragging_col = new_col;
+}
+
         }
     // 拖曳結束，滑鼠放開
-    }else if (b->now - b->bead_start_time < b->bead_time_limit) {
+    }
+    else if (b->now - b->bead_start_time < b->bead_time_limit) {
         mouse_down = false;
         b->click = false;
-    }else if (!mouse_down && dragging_bead) {
-        // printf("[Release] Bead dropped at grid[%d][%d]\n", last_grid_row, last_grid_col);
+    }
+    else if (!mouse_down && dragging_bead)//玩家剛剛拖了一顆珠子，現在放開了滑鼠
+     {
         move_bead_to(dragging_bead, last_grid_row, last_grid_col);
         dragging_bead = NULL;
         b->click = false;
@@ -228,7 +246,8 @@ void Bead_draw(Elements *self) {
         al_draw_text(obj->font1, al_map_rgb(205, 0, 55), 373, 253, ALLEGRO_ALIGN_LEFT, obj->skill2_2_str);
     }
     if((obj->now - obj->bead_start_time < 5) && obj->click){
-        al_draw_filled_rectangle(240, 275, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 290, al_map_rgb(55, 255, 100));
+        al_draw_filled_rectangle(240, 275, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 290, al_map_rgb(55, 255, 100));//條寬 = 剩餘時間 × 80 像素
+        //前提是：正在點擊 (obj->click == true) 且拖曳還在 5 秒內
     }if(((ROUND-1)/3 - obj->recovery) <= 4){
         al_draw_filled_rectangle(240, 290, 640 - ((ROUND-1)/3 - obj->recovery)*100, 305, al_map_rgb(255, 192, 203));
     }
