@@ -6,6 +6,8 @@ typedef struct _Scene Scene;
 #include "element.h"
 #include "../shapes/Shape.h"
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
 
 #define NUM_BEAD_TYPES 4
 #define GRID_COLS 6
@@ -17,6 +19,15 @@ typedef struct _Bead {
     int row, col;          // ✅ 加上這兩行
     int round;
     int recovery;
+    int skill1_1;
+    int skill1_2;
+    int skill2_1;
+    int skill2_2;
+    char skill1_2_str[10];
+    char skill2_2_str[10];
+    char skill1_1_str[10];
+    char skill2_1_str[10];
+    ALLEGRO_FONT *font1;
     bool recovery_add;
     ALLEGRO_BITMAP *img;
     Shape *hitbox;

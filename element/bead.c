@@ -27,10 +27,15 @@ Elements *New_Bead(int label, int col, int row, int type) {
     Bead *pDerivedObj = (Bead *)malloc(sizeof(Bead));
     Elements *pObj = New_Elements(label);
 
+    pDerivedObj->font1 = al_load_ttf_font("assets/font/DIN Condensed Bold.ttf", 24, 0);
     pDerivedObj->x = get_grid_cx(col);
     pDerivedObj->y = get_grid_cy(row);
     pDerivedObj->w = 67;
     pDerivedObj->h = 67;
+    pDerivedObj->skill1_1 = 4;
+    pDerivedObj->skill1_2 = 3;
+    pDerivedObj->skill2_1 = 8;
+    pDerivedObj->skill2_2 = 6;
     pDerivedObj->round = 0;
     pDerivedObj->recovery = 0;
     pDerivedObj->recovery_add = false;
@@ -151,21 +156,30 @@ void Bead_update(Elements *self) {
         move_bead_to(dragging_bead, last_grid_row, last_grid_col);
         dragging_bead = NULL;
         b->click = false;
-        ROUND++;
+        ROUND ++;
     }
     mouse_was_down = mouse_down;
-    if(mouse_down && 240 < mstate.x && mstate.x < 290 && 225 < mstate.y && mstate.y < 290){
-        b->bead_time_limit = 7.0;
-        b->round = ROUND;
+    if((b->skill1_1 - ROUND)<= 0){
+        if(mouse_down && 290 < mstate.x && mstate.x < 315 && 225 < mstate.y && mstate.y < 250){
+            b->bead_time_limit = 7.0;
+            b->round = ROUND;
+            b->skill1_1 = ROUND + 3;
+        }
     }else if(b->round == (ROUND - 1)){
-        b->bead_time_limit = 5.0;
-    }
-    if(mouse_down && 240 < mstate.x && mstate.x < 290 && 225 < mstate.y && mstate.y < 290 && !b->recovery_add){
-        b->recovery ++;
-        b->recovery_add = true;
-        if(b->type == 1){
-        b->img = bead_imgs[2];
-    }
+            b->bead_time_limit = 5.0;
+    }if((b->skill2_2 - ROUND)<= 0){
+        if(mouse_down && 365 < mstate.x && mstate.x < 390 && 250 < mstate.y && mstate.y < 275 && !b->recovery_add){
+            b->recovery ++;
+            b->recovery_add = true;
+            b->skill2_2 = ROUND + 5;
+        }
+    }if((b->skill2_1 - ROUND)<= 0){
+        if(mouse_down && 365 < mstate.x && mstate.x < 390 && 225 < mstate.y && mstate.y < 250){
+            if(b->type == 1){
+                b->img = bead_imgs[2];
+            }
+            b->skill2_1 = ROUND + 7;
+        }
     }
 }
 
@@ -180,7 +194,39 @@ void Bead_draw(Elements *self) {
         obj->x, obj->y, obj->w, obj->h,
         0
     );
-    al_draw_filled_rectangle(240, 225, 290, 275, al_map_rgb(100, 100, 100));
+    al_draw_filled_rectangle(240, 225, 290, 275, al_map_rgb(100, 100, 50));
+    al_draw_filled_rectangle(290, 250, 315, 275, al_map_rgb(150, 150, 150));
+    al_draw_filled_rectangle(315, 225, 365, 275, al_map_rgb(50, 100, 100));
+    al_draw_filled_rectangle(365, 225, 390, 250, al_map_rgb(100, 100, 100));
+    al_draw_filled_rectangle(365, 250, 390, 275, al_map_rgb(150, 150, 150));
+    if((obj->skill1_1 - ROUND) <= 0){
+        al_draw_filled_rectangle(290, 225, 315, 250, al_map_rgb(0, 250, 100));
+    }else{
+        al_draw_filled_rectangle(290, 225, 315, 250, al_map_rgb(100, 100, 100));
+        snprintf(obj->skill1_1_str, sizeof(obj->skill1_1_str), "%d", obj->skill1_1 - ROUND);
+        al_draw_text(obj->font1, al_map_rgb(205, 0, 55), 298, 228, ALLEGRO_ALIGN_LEFT, obj->skill1_1_str);
+    }
+    if((obj->skill1_2 - ROUND) <= 0){
+        al_draw_filled_rectangle(290, 250, 315, 275, al_map_rgb(0, 250, 100));
+    }else{
+        al_draw_filled_rectangle(290, 250, 315, 275, al_map_rgb(100, 100, 100));
+        snprintf(obj->skill1_2_str, sizeof(obj->skill1_2_str), "%d", obj->skill1_2 - ROUND);
+        al_draw_text(obj->font1, al_map_rgb(205, 0, 55), 298, 253, ALLEGRO_ALIGN_LEFT, obj->skill1_2_str);
+    }
+    if((obj->skill2_1 - ROUND) <= 0){
+        al_draw_filled_rectangle(365, 225, 390, 250, al_map_rgb(0, 250, 100));
+    }else{
+        al_draw_filled_rectangle(365, 225, 390, 250, al_map_rgb(100, 100, 100));
+        snprintf(obj->skill2_1_str, sizeof(obj->skill2_1_str), "%d", obj->skill2_1 - ROUND);
+        al_draw_text(obj->font1, al_map_rgb(205, 0, 55), 373, 228, ALLEGRO_ALIGN_LEFT, obj->skill2_1_str);
+    }
+    if((obj->skill2_2 - ROUND) <= 0){
+        al_draw_filled_rectangle(365, 250, 390, 275, al_map_rgb(0, 250, 100));
+    }else{
+        al_draw_filled_rectangle(365, 250, 390, 275, al_map_rgb(100, 100, 100));
+        snprintf(obj->skill2_2_str, sizeof(obj->skill2_2_str), "%d", obj->skill2_2 - ROUND);
+        al_draw_text(obj->font1, al_map_rgb(205, 0, 55), 373, 253, ALLEGRO_ALIGN_LEFT, obj->skill2_2_str);
+    }
     if((obj->now - obj->bead_start_time < 5) && obj->click){
         al_draw_filled_rectangle(240, 275, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 290, al_map_rgb(55, 255, 100));
     }if(((ROUND-1)/3 - obj->recovery) <= 4){
