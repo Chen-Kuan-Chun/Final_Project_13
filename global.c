@@ -19,3 +19,4 @@ bool debug_mode = false;
 int global_mouse_x = 0;
 int global_mouse_y = 0;
 bool global_mouse_down = false;
+int TIME = 0;

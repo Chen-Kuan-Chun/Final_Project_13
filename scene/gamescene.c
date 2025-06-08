@@ -16,18 +16,18 @@
 */
 Scene *New_GameScene(int label)
 {
-    int i, j;
     GameScene *pDerivedObj = (GameScene *)malloc(sizeof(GameScene));
     Scene *pObj = New_Scene(label);
     // setting derived object member
-    pDerivedObj->background = al_load_bitmap("assets/image/stage.jpg");
+    pDerivedObj->background = al_load_bitmap("assets/image/stage.jpg");       // 5秒限制
+
     pObj->pDerivedObj = pDerivedObj;
     // register element
     //_Register_elements(pObj, New_Floor(Floor_L));
     //_Register_elements(pObj, New_Teleport(Teleport_L));
     //_Register_elements(pObj, New_Tree(Tree_L));
     //_Register_elements(pObj, New_Character(Character_L));
-   Generate_Bead_Grid(pObj);
+    Generate_Bead_Grid(pObj);
     _Register_elements(pObj, New_Boss1(Boss1_L));
     _Register_elements(pObj, New_DamageInput(DamageInput_L));
     _Register_elements(pObj, New_BlackLine(BlackLine_L));

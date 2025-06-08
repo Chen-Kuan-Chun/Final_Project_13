@@ -21,6 +21,7 @@ typedef enum EleType
 typedef struct _GameScene
 {
     ALLEGRO_BITMAP *background;
+    bool bead_stop;
 
 } GameScene;
 Scene *New_GameScene(int label);

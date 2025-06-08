@@ -17,6 +17,9 @@ typedef struct _Bead {
     int row, col;          // ✅ 加上這兩行
     ALLEGRO_BITMAP *img;
     Shape *hitbox;
+    double bead_start_time;  // 轉珠開始的時間點
+    double bead_time_limit;  // 轉珠限制秒數，比如5秒
+    double now;
 } Bead;
 
 

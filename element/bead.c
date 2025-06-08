@@ -30,6 +30,9 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->h = 67;
     pDerivedObj->type = type;
     pDerivedObj->img = bead_imgs[type];
+    pDerivedObj->bead_start_time = al_get_time();  // 轉珠開始的時間
+    pDerivedObj->bead_time_limit = 5.0;     
+    pDerivedObj->now = al_get_time();
     pObj->pDerivedObj = pDerivedObj;
 
     pObj->Update = Bead_update;
@@ -78,12 +81,14 @@ void Bead_update(Elements *self) {
     al_get_mouse_state(&mstate);
 
     bool mouse_down = al_mouse_button_down(&mstate, 1);
+    b->now = al_get_time();
 
     // 印出滑鼠狀態
-    printf("[Mouse] x=%d y=%d down=%d\n", mstate.x, mstate.y, mouse_down);
+    // printf("[Mouse] x=%d y=%d down=%d\n", mstate.x, mstate.y, mouse_down);
 
     // 滑鼠按下、剛開始拖曳
-    if (mouse_down && !mouse_was_down && dragging_bead == NULL) {
+    if (mouse_down && !mouse_was_down && dragging_bead == NULL ) {
+        
         printf("[Info] Mouse down, check which bead is clicked.\n");
         for (int r = 0; r < GRID_ROWS; r++) {
             for (int c = 0; c < GRID_COLS; c++) {
@@ -91,7 +96,7 @@ void Bead_update(Elements *self) {
                 if (target) {
                     float dx = fabs(mstate.x - target->x);
                     float dy = fabs(mstate.y - target->y);
-                    printf(" - Check bead[%d][%d]: x=%.1f y=%.1f dx=%.1f dy=%.1f\n", r, c, target->x, target->y, dx, dy);
+                    // printf(" - Check bead[%d][%d]: x=%.1f y=%.1f dx=%.1f dy=%.1f\n", r, c, target->x, target->y, dx, dy);
 
                     if (dx < 30 && dy < 30) {
                         dragging_bead = target;
@@ -99,7 +104,8 @@ void Bead_update(Elements *self) {
                         dragging_col = c;
                         last_grid_row = r;
                         last_grid_col = c;
-                        printf("[Success] Drag start on bead[%d][%d]\n", r, c);
+                        b->bead_start_time = al_get_time();
+                        // printf("[Success] Drag start on bead[%d][%d]\n", r, c);
                         return;
                     }
                 }
@@ -107,8 +113,8 @@ void Bead_update(Elements *self) {
         }
     }
     // 正在拖曳
-    else if (mouse_down && dragging_bead) {
-        printf("[Dragging] Bead at x=%d y=%d\n", mstate.x, mstate.y);
+    else if (mouse_down && dragging_bead && (b->now - b->bead_start_time < b->bead_time_limit)) {
+        // printf("[Dragging] Bead at x=%d y=%d\n", mstate.x, mstate.y);
         dragging_bead->x = mstate.x;
         dragging_bead->y = mstate.y;
 
@@ -127,14 +133,14 @@ void Bead_update(Elements *self) {
                 bead_grid[new_row][new_col] = dragging_bead;
             }
         }
-    }
     // 拖曳結束，滑鼠放開
-    else if (!mouse_down && dragging_bead) {
-        printf("[Release] Bead dropped at grid[%d][%d]\n", last_grid_row, last_grid_col);
+    }else if (b->now - b->bead_start_time < b->bead_time_limit) {
+        mouse_down = false;
+    }else if (!mouse_down && dragging_bead) {
+        // printf("[Release] Bead dropped at grid[%d][%d]\n", last_grid_row, last_grid_col);
         move_bead_to(dragging_bead, last_grid_row, last_grid_col);
         dragging_bead = NULL;
     }
-
     mouse_was_down = mouse_down;
 }
 
@@ -149,6 +155,9 @@ void Bead_draw(Elements *self) {
         obj->x, obj->y, obj->w, obj->h,
         0
     );
+    /*if(obj->now - obj->bead_start_time < 5){
+        al_draw_filled_rectangle(100, 100, 300, 200, al_map_rgb(205, 255, 100));
+    }*/
 }
 
 void Bead_destory(Elements *self) {
