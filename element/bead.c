@@ -212,11 +212,6 @@ void Bead_draw(Elements *self) {
         obj->x, obj->y, obj->w, obj->h,
         0
     );
-    al_draw_filled_rectangle(240, 225, 290, 275, al_map_rgb(100, 100, 50));
-    al_draw_filled_rectangle(290, 250, 315, 275, al_map_rgb(150, 150, 150));
-    al_draw_filled_rectangle(315, 225, 365, 275, al_map_rgb(50, 100, 100));
-    al_draw_filled_rectangle(365, 225, 390, 250, al_map_rgb(100, 100, 100));
-    al_draw_filled_rectangle(365, 250, 390, 275, al_map_rgb(150, 150, 150));
     if((obj->skill1_1 - ROUND) <= 0){
         al_draw_filled_rectangle(290, 225, 315, 250, al_map_rgb(0, 250, 100));
     }else{
@@ -227,7 +222,7 @@ void Bead_draw(Elements *self) {
     if((obj->skill1_2 - ROUND) <= 0){
         al_draw_filled_rectangle(290, 250, 315, 275, al_map_rgb(0, 250, 100));
     }else{
-        al_draw_filled_rectangle(290, 250, 315, 275, al_map_rgb(100, 100, 100));
+        al_draw_filled_rectangle(290, 250, 315, 275, al_map_rgb(125, 125, 125));
         snprintf(obj->skill1_2_str, sizeof(obj->skill1_2_str), "%d", obj->skill1_2 - ROUND);
         al_draw_text(obj->font1, al_map_rgb(205, 0, 55), 298, 253, ALLEGRO_ALIGN_LEFT, obj->skill1_2_str);
     }
@@ -241,7 +236,7 @@ void Bead_draw(Elements *self) {
     if((obj->skill2_2 - ROUND) <= 0){
         al_draw_filled_rectangle(365, 250, 390, 275, al_map_rgb(0, 250, 100));
     }else{
-        al_draw_filled_rectangle(365, 250, 390, 275, al_map_rgb(100, 100, 100));
+        al_draw_filled_rectangle(365, 250, 390, 275, al_map_rgb(125, 125, 125));
         snprintf(obj->skill2_2_str, sizeof(obj->skill2_2_str), "%d", obj->skill2_2 - ROUND);
         al_draw_text(obj->font1, al_map_rgb(205, 0, 55), 373, 253, ALLEGRO_ALIGN_LEFT, obj->skill2_2_str);
     }

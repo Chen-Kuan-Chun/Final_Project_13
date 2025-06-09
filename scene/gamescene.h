@@ -18,7 +18,8 @@ typedef enum EleType
     Boss1_L,
     DamageInput_L,
     BlackLine_L,
-    MatchMgr_L
+    MatchMgr_L,
+    Draw_L
 } EleType;
 typedef struct _GameScene
 {

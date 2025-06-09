@@ -13,6 +13,7 @@
 #include "../element/count_points.h"
 #include "../shapes/Rectangle.h"
 #include "../shapes/Shape.h"
+#include "../element/draw.h"
 /*
    [GameScene function]
 */
@@ -34,6 +35,7 @@ Scene *New_GameScene(int label)
     _Register_elements(pObj, New_DamageInput(DamageInput_L));
     _Register_elements(pObj, New_BlackLine(BlackLine_L));
     _Register_elements(pObj, New_MatchManager(MatchMgr_L));
+    _Register_elements(pObj, New_Draw(Draw_L));
 
     // setting derived object function
     pObj->Update = game_scene_update;

@@ -3,6 +3,7 @@
         "projectile.h": "c",
         "allegro.h": "c",
         "time.h": "c",
-        "allegro_primitives.h": "c"
+        "allegro_primitives.h": "c",
+        "gamescene.h": "c"
     }
 }
