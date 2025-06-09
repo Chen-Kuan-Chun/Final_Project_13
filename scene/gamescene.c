@@ -61,6 +61,7 @@ void game_scene_update(Scene *self)
     if (mouse_state.buttons & 1) {
         if (gs->mouse_back) {
             self->scene_end = true;
+            ROUND = 1;
             window = 0;
         }
     }
