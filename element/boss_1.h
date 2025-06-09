@@ -12,7 +12,8 @@
        int  width, height; /* sprite W/H         */
        int draw_w, draw_h;
        int  hp;
-       bool dir;           /* reserve for future flip */
+       bool dir;
+       int element;           /* 0 = fire 1 = water */
        ALLEGRO_BITMAP *bmp;/* boss1.png sprite   */
    } Boss1;
    

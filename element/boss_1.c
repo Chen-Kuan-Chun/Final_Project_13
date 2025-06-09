@@ -45,7 +45,8 @@ Elements *New_Boss1(int label)
     /* 計算縮放後要畫多大 (等比例) */
     b->draw_w = TARGET_W;
     b->draw_h = (int)(b->height * (TARGET_W / (float)b->width));
-
+    b->element = 3;
+    
     b->x  = 300;
     b->y  = 100;
     b->hp = 100;
