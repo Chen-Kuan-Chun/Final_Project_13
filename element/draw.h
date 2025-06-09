@@ -14,6 +14,7 @@ typedef struct _Draw
     ALLEGRO_BITMAP *role1;
     ALLEGRO_BITMAP *role2;
     ALLEGRO_BITMAP *heart;
+    ALLEGRO_BITMAP *time;
 } Draw;
 Elements *New_Draw(int label);
 void Draw_update(Elements *self);

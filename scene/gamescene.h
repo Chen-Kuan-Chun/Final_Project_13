@@ -12,18 +12,22 @@ typedef enum EleType
     Floor_L,
     Teleport_L,
     Tree_L,
+    Draw_L,
     Character_L,
     Projectile_L,
     Bead_L,
     Boss1_L,
     DamageInput_L,
     BlackLine_L,
-    MatchMgr_L,
-    Draw_L
+    MatchMgr_L
 } EleType;
 typedef struct _GameScene
 {
     ALLEGRO_BITMAP *background;
+    ALLEGRO_BITMAP *background1;
+    ALLEGRO_BITMAP *background2;
+    ALLEGRO_BITMAP *back;
+    bool mouse_back;
     bool bead_stop;
     ALLEGRO_FONT *font1;
     char round_str[20];

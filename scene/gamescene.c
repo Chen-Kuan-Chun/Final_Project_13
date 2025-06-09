@@ -22,8 +22,12 @@ Scene *New_GameScene(int label)
     GameScene *pDerivedObj = (GameScene *)malloc(sizeof(GameScene));
     Scene *pObj = New_Scene(label);
     // setting derived object member
-    pDerivedObj->background = al_load_bitmap("assets/image/stage.jpg");       // 5秒限制
+    pDerivedObj->background = al_load_bitmap("assets/image/stage.jpg");  
+    pDerivedObj->background1 = al_load_bitmap("assets/image/background1.png");     
+    pDerivedObj->background2 = al_load_bitmap("assets/image/background2.png");
+    pDerivedObj->back = al_load_bitmap("assets/image/back.png");        
     pDerivedObj->font1 = al_load_ttf_font("assets/font/DIN Condensed Bold.ttf", 28, 0);
+    pDerivedObj->mouse_back = false;
     pObj->pDerivedObj = pDerivedObj;
     // register element
     //_Register_elements(pObj, New_Floor(Floor_L));
@@ -48,7 +52,18 @@ Scene *New_GameScene(int label)
 
 void game_scene_update(Scene *self)
 {
+    GameScene *gs = ((GameScene *)(self->pDerivedObj));
+    ALLEGRO_MOUSE_STATE mouse_state;
+    al_get_mouse_state(&mouse_state);
     // update every element
+    gs->mouse_back = (mouse_state.x >= 800 && mouse_state.x <= 900 &&
+                                mouse_state.y >= 50 && mouse_state.y <= 150);
+    if (mouse_state.buttons & 1) {
+        if (gs->mouse_back) {
+            self->scene_end = true;
+            window = 0;
+        }
+    }
     ElementVec allEle = _Get_all_elements(self);
     for (int i = 0; i < allEle.len; i++)
     {
@@ -73,7 +88,11 @@ void game_scene_draw(Scene *self)
 {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     GameScene *gs = ((GameScene *)(self->pDerivedObj));
-    al_draw_bitmap(gs->background, 0, 0, 0);
+    if(ROUND > 10){
+        al_draw_bitmap(gs->background2, 0, 0, 0);
+    }else{
+        al_draw_bitmap(gs->background1, 0, 0, 0);
+    }
     ElementVec allEle = _Get_all_elements(self);
     for (int i = 0; i < allEle.len; i++)
     {
@@ -86,6 +105,12 @@ void game_scene_draw(Scene *self)
     snprintf(gs->boss_round_str, sizeof(gs->round_str), "%d", 3 - (ROUND-1)%3);
     al_draw_text(gs->font1, al_map_rgb(255, 0, 0), 300, 100, ALLEGRO_ALIGN_LEFT, gs->boss_round_str);
     al_draw_text(gs->font1, al_map_rgb(255, 0, 0), 270, 100, ALLEGRO_ALIGN_LEFT, "CD");
+    al_draw_scaled_bitmap(
+        gs->back,
+        0, 0, al_get_bitmap_width(gs->back), al_get_bitmap_height(gs->back),
+        800, 50, 100, 100,
+        0
+    );
 }
 void game_scene_destroy(Scene *self)
 {
