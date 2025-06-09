@@ -45,7 +45,7 @@
        d->font = al_load_ttf_font("assets/font/pirulen.ttf",24,0);
        if(!d->font) d->font = al_create_builtin_font();
        al_reserve_samples(8);
-       d->song = al_load_sample("assets/sound/defeat.mp3");
+       d->song = al_load_sample("assets/sound/defeat.wav");
        d->sinst = al_create_sample_instance(d->song);
        al_set_sample_instance_playmode(d->sinst, ALLEGRO_PLAYMODE_LOOP);
        al_attach_sample_instance_to_mixer(d->sinst, al_get_default_mixer());

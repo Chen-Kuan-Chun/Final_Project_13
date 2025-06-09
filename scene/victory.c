@@ -45,11 +45,11 @@
        d->font = al_load_ttf_font("assets/font/pirulen.ttf",24,0);
        if(!d->font) d->font = al_create_builtin_font();
        al_reserve_samples(8);
-       d->song = al_load_sample("assets/sound/victory.mp3");
+       d->song = al_load_sample("assets/sound/victory.wav");
        d->sinst = al_create_sample_instance(d->song);
        al_set_sample_instance_playmode(d->sinst, ALLEGRO_PLAYMODE_LOOP);
        al_attach_sample_instance_to_mixer(d->sinst, al_get_default_mixer());
-       al_set_sample_instance_gain(d->sinst,0.4);
+       al_set_sample_instance_gain(d->sinst,0.1);
        d->cx = WIDTH/2; d->cy = HEIGHT/2;
    
        s->pDerivedObj=d;
