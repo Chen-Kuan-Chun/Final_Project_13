@@ -6,6 +6,8 @@ typedef enum SceneType
 {
     Menu_L = 0,
     GameScene_L,
+    Card_L,
+    About_L,
     Defeat_L,
     Victory_L
 } SceneType;

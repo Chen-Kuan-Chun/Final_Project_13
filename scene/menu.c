@@ -68,12 +68,6 @@ void menu_update(Scene *self)
         }
     }
     return;
-    if (key_state[ALLEGRO_KEY_ENTER])
-    {
-        self->scene_end = true;
-        window = 1;
-    }
-    return;
 }
 void menu_draw(Scene *self)
 {

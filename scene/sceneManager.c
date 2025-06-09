@@ -3,6 +3,8 @@
 #include "gamescene.h"
 #include "defeat.h" 
 #include "victory.h"
+#include "card.h"
+#include "about.h"
 
 Scene *scene = NULL;
 void create_scene(SceneType type)
@@ -11,6 +13,12 @@ void create_scene(SceneType type)
     {
     case Menu_L:
         scene = New_Menu(Menu_L);
+        break;
+    case Card_L: 
+        scene = New_Card(Card_L);
+        break;
+    case About_L: 
+        scene = New_About(About_L);
         break;
     case GameScene_L:
         scene = New_GameScene(GameScene_L);
