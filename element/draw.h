@@ -11,12 +11,9 @@
 */
 typedef struct _Draw
 {
-    int x, y;          // the position of image
-    int width, height; // the width and height of image
-    ALLEGRO_BITMAP *img;
-    Shape *hitbox; // the hitbox of object
     ALLEGRO_BITMAP *role1;
     ALLEGRO_BITMAP *role2;
+    ALLEGRO_BITMAP *heart;
 } Draw;
 Elements *New_Draw(int label);
 void Draw_update(Elements *self);

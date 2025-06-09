@@ -84,7 +84,8 @@ void game_scene_draw(Scene *self)
     snprintf(gs->round_str, sizeof(gs->round_str), "%d", ROUND);
     al_draw_text(gs->font1, al_map_rgb(255, 255, 255), 170, 100, ALLEGRO_ALIGN_LEFT, gs->round_str);
     snprintf(gs->boss_round_str, sizeof(gs->round_str), "%d", 3 - (ROUND-1)%3);
-    al_draw_text(gs->font1, al_map_rgb(255, 0, 0), 500, 200, ALLEGRO_ALIGN_LEFT, gs->boss_round_str);
+    al_draw_text(gs->font1, al_map_rgb(255, 0, 0), 300, 100, ALLEGRO_ALIGN_LEFT, gs->boss_round_str);
+    al_draw_text(gs->font1, al_map_rgb(255, 0, 0), 270, 100, ALLEGRO_ALIGN_LEFT, "CD");
 }
 void game_scene_destroy(Scene *self)
 {

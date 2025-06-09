@@ -13,12 +13,7 @@ Elements *New_Draw(int label)
     // setting derived object member
     pDerivedObj->role1 = al_load_bitmap("assets/image/role1.png");
     pDerivedObj->role2 = al_load_bitmap("assets/image/role2.png");
-    pDerivedObj->x = 85;
-    pDerivedObj->y = HEIGHT - pDerivedObj->height;
-    pDerivedObj->hitbox = New_Rectangle(pDerivedObj->x + pDerivedObj->width / 3,
-                                        pDerivedObj->y + pDerivedObj->height / 3,
-                                        pDerivedObj->x + 2 * pDerivedObj->width / 3,
-                                        pDerivedObj->y + 2 * pDerivedObj->height / 3);
+    pDerivedObj->heart = al_load_bitmap("assets/image/heart.png");
     // setting derived object function
     pObj->pDerivedObj = pDerivedObj;
     pObj->Update = Draw_update;
@@ -44,12 +39,19 @@ void Draw_draw(Elements *self)
         315, 225, 50, 50,
         0
     );
+        al_draw_scaled_bitmap(
+        obj->heart,
+        0, 0, al_get_bitmap_width(obj->heart), al_get_bitmap_height(obj->heart),
+        215, 280, 25, 25,
+        0
+    );
 }
 void Draw_destory(Elements *self)
 {
     Draw *Obj = ((Draw *)(self->pDerivedObj));
-    al_destroy_bitmap(Obj->img);
-    free(Obj->hitbox);
+    al_destroy_bitmap(Obj->role1);
+    al_destroy_bitmap(Obj->role2);
+    al_destroy_bitmap(Obj->heart);
     free(Obj);
     free(self);
 }
