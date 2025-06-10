@@ -14,6 +14,13 @@ typedef struct _About
     ALLEGRO_SAMPLE_INSTANCE *sample_instance;
     int title_x, title_y;
     bool mouse_over_new_game, mouse_over_level, mouse_over_about;
+    ALLEGRO_BITMAP *intro_1;
+    ALLEGRO_BITMAP *intro_2;
+    ALLEGRO_BITMAP *intro_3;
+    ALLEGRO_BITMAP *intro_4;
+    ALLEGRO_BITMAP *intro_5;
+    ALLEGRO_BITMAP *intro_6;
+    int page;
 } About;
 Scene *New_About(int label);
 void about_update(Scene *self);

@@ -48,6 +48,8 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->skill2_1 = 8;
     pDerivedObj->skill2_2 = 6;
     pDerivedObj->round = 0;
+    pDerivedObj->round2 = 0;
+    pDerivedObj->atk = 1;
     pDerivedObj->recovery = 0;
     pDerivedObj->recovery_add = false;
     pDerivedObj->type = type;
@@ -110,7 +112,7 @@ void Generate_Bead_Grid(Scene *scene) {
                     b->type = rand() % 4; // 假設 NUM_TYPES 是總種類數
                     b->img = bead_imgs[b->type];
                     b->destroyed = false; // 清除標記
-                    COUNT++;
+                    COUNT = 1;
                 }
             }
         }
@@ -135,6 +137,9 @@ void Bead_update(Elements *self) {
 
     bool mouse_down = al_mouse_button_down(&mstate, 1);//if1表示滑鼠有點左鍵
     b->now = al_get_time();
+    if(COUNT < 50 && ROUND > 3){
+        b->bead_time_limit = 4;
+    }
 
 
     // 滑鼠按下、剛開始拖曳
@@ -208,7 +213,6 @@ void Bead_update(Elements *self) {
         dragging_bead = NULL;
         b->click = false;
         ROUND ++;
-        COUNT = 0;
         for (int r = 0; r < GRID_ROWS; r++) {
             for (int c = 0; c < GRID_COLS; c++) {
                 if (bead_grid[r][c]) {
@@ -221,19 +225,16 @@ void Bead_update(Elements *self) {
                 Bead* b = bead_grid[r][c];
                 if (b && b->destroyed) {
                     // 這裡可以依你需求換成你要的轉換邏輯：
+                    if(b->type == 2){
+                        COUNT += (b->atk*2);
+                    }else if(b->type == 0){
+                        COUNT += b->atk;
+                    }else if(b->type == 1){
+                        RECOVER ++;
+                    }
                     b->type = rand() % 4; // 假設 NUM_TYPES 是總種類數
                     b->img = bead_imgs[b->type];
                     b->destroyed = false; // 清除標記
-                    COUNT++;
-                    ensure_destroy_sample();
-                    al_play_sample(
-                        destroy_smp,    /* 音檔指標            */
-                        0.1,            /* 左右平均音量        */
-                        0.0,            /* 左右平衡 -1~+1      */
-                        1.0,            /* 播放速度 (1=正常)   */
-                        ALLEGRO_PLAYMODE_ONCE,
-                        NULL            /* 不用取回實例指標    */
-                    );
                 }
             }
         }
@@ -247,6 +248,15 @@ void Bead_update(Elements *self) {
         }
     }else if(b->round == (ROUND - 1)){
             b->bead_time_limit = 5.0;
+    }
+    if((b->skill1_2 - ROUND)<= 0){
+        if(mouse_down && 290 < mstate.x && mstate.x < 315 && 250 < mstate.y && mstate.y < 275){
+            b->round2 = ROUND;
+            b->skill1_2 = ROUND + 2;
+            b->atk = 2;
+        }
+    }else if(b->round2 == (ROUND - 1)){
+        b->atk = 1;
     }if((b->skill2_2 - ROUND)<= 0){
         if(mouse_down && 365 < mstate.x && mstate.x < 390 && 250 < mstate.y && mstate.y < 275 && !b->recovery_add){
             b->recovery ++;
@@ -256,7 +266,8 @@ void Bead_update(Elements *self) {
     }if((b->skill2_1 - ROUND)<= 0){
         if(mouse_down && 365 < mstate.x && mstate.x < 390 && 225 < mstate.y && mstate.y < 250){
             if(b->type == 1){
-                b->img = bead_imgs[2];
+                b->type = 2;
+                b->img = bead_imgs[b->type];
             }
             b->skill2_1 = ROUND + 7;
         }
@@ -306,7 +317,10 @@ void Bead_draw(Elements *self) {
         al_draw_filled_rectangle(240, 275, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 290, al_map_rgb(250, 255, 100));//條寬 = 剩餘時間 × 80 像素
         //前提是：正在點擊 (obj->click == true) 且拖曳還在 5 秒內
     }if(((ROUND-1)/3 - obj->recovery) <= 4){
-        al_draw_filled_rectangle(240, 290, 640 - ((ROUND-1)/3 - obj->recovery)*100, 305, al_map_rgb(255, 192, 203));
+        al_draw_filled_rectangle(240, 290, 640 - ((ROUND-1)/3 - obj->recovery - (RECOVER/3))*100, 305, al_map_rgb(255, 192, 203));
+    }
+    if((4 - (ROUND-1)/3 + obj->recovery + (RECOVER/3)) <= 0){
+        OVER = true;
     }
 }
 

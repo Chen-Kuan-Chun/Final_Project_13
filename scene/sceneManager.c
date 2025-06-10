@@ -5,6 +5,8 @@
 #include "victory.h"
 #include "card.h"
 #include "about.h"
+#include "gg.h"
+#include "yy.h"
 
 Scene *scene = NULL;
 void create_scene(SceneType type)
@@ -23,11 +25,11 @@ void create_scene(SceneType type)
     case GameScene_L:
         scene = New_GameScene(GameScene_L);
         break;
-    case Defeat_L: 
-        scene = New_Defeat(Defeat_L);
+    case Yy_L: 
+        scene = New_Yy(Yy_L);
         break;
-    case Victory_L: 
-        scene = New_Victory(Victory_L);
+    case Gg_L: 
+        scene = New_Gg(Gg_L);
         break;
 
     default:
