@@ -14,6 +14,10 @@ typedef struct _Menu
     ALLEGRO_SAMPLE_INSTANCE *sample_instance;
     int title_x, title_y;
     bool mouse_over_new_game, mouse_over_level, mouse_over_about;
+    ALLEGRO_BITMAP *intro;
+    ALLEGRO_BITMAP *card;
+    ALLEGRO_BITMAP *game;
+    ALLEGRO_BITMAP *menu;
 } Menu;
 Scene *New_Menu(int label);
 void menu_update(Scene *self);
