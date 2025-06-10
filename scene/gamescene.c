@@ -30,6 +30,17 @@ Scene *New_GameScene(int label)
     pDerivedObj->font1 = al_load_ttf_font("assets/font/DIN Condensed Bold.ttf", 28, 0);
     pDerivedObj->mouse_back = false;
     pObj->pDerivedObj = pDerivedObj;
+
+    al_reserve_samples(20);
+    pDerivedObj->song = al_load_sample("assets/sound/bgm.wav");
+    if (!pDerivedObj->song) {
+        fprintf(stderr, "Failed to load assets/sound/bgm.wav\n");
+    }
+    pDerivedObj->sample_instance = al_create_sample_instance(pDerivedObj->song);
+    al_set_sample_instance_playmode(pDerivedObj->sample_instance, ALLEGRO_PLAYMODE_LOOP);
+    al_restore_default_mixer();
+    al_attach_sample_instance_to_mixer(pDerivedObj->sample_instance, al_get_default_mixer());
+    al_set_sample_instance_gain(pDerivedObj->sample_instance, 0.1);
     // register element
     //_Register_elements(pObj, New_Floor(Floor_L));
     //_Register_elements(pObj, New_Teleport(Teleport_L));
@@ -129,6 +140,7 @@ void game_scene_draw(Scene *self)
         800, 50, 100, 100,
         0
     );
+    al_play_sample_instance(gs->sample_instance);
 }
 void game_scene_destroy(Scene *self)
 {
