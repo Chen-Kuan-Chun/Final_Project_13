@@ -153,6 +153,8 @@ void game_scene_destroy(Scene *self)
         Elements *ele = allEle.arr[i];
         ele->Destroy(ele);
     }
+    al_destroy_sample(Obj->song);
+    al_destroy_sample_instance(Obj->sample_instance);
     free(Obj);
     free(self);
 }
