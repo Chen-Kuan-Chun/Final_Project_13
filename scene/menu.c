@@ -15,7 +15,7 @@ Scene *New_Menu(int label)
     // setting derived object member
     pDerivedObj->font = al_load_ttf_font("assets/font/pirulen.ttf", 18, 0);
     // Load sound
-    pDerivedObj->song = al_load_sample("assets/sound/menu.mp3");
+    pDerivedObj->song = al_load_sample("assets/sound/menu.wav");
     pDerivedObj->intro = al_load_bitmap("assets/image/intro.PNG");
     pDerivedObj->card = al_load_bitmap("assets/image/Dcard.PNG");
     pDerivedObj->game = al_load_bitmap("assets/image/game.PNG");

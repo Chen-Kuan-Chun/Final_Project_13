@@ -13,8 +13,21 @@ Scene *New_Yy(int label)
     Yy *pDerivedObj = (Yy *)malloc(sizeof(Yy));
     Scene *pObj = New_Scene(label);
     pObj->pDerivedObj = pDerivedObj;
+
+    al_reserve_samples(20);
+    pDerivedObj->song = al_load_sample("assets/sound/victory.wav");
+    if (!pDerivedObj->song) {
+        fprintf(stderr, "Failed to load assets/sound/victory.wav\n");
+    }
+    pDerivedObj->sample_instance = al_create_sample_instance(pDerivedObj->song);
+    al_set_sample_instance_playmode(pDerivedObj->sample_instance, ALLEGRO_PLAYMODE_LOOP);
+    al_restore_default_mixer();
+    al_attach_sample_instance_to_mixer(pDerivedObj->sample_instance, al_get_default_mixer());
+    al_set_sample_instance_gain(pDerivedObj->sample_instance, 0.1);
+
     pDerivedObj->yy = al_load_bitmap("assets/image/yy.JPG");
     // setting derived object function
+
     pObj->Update = yy_update;
     pObj->Draw = yy_draw;
     pObj->Destroy = yy_destroy;
@@ -41,6 +54,7 @@ void yy_draw(Scene *self)
         0, 0, WIDTH, HEIGHT,
         0
     );
+    al_play_sample_instance(Obj->sample_instance);
 }
 void yy_destroy(Scene *self)
 {
