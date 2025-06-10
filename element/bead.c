@@ -235,6 +235,15 @@ void Bead_update(Elements *self) {
                     b->type = rand() % 4; // 假設 NUM_TYPES 是總種類數
                     b->img = bead_imgs[b->type];
                     b->destroyed = false; // 清除標記
+                    ensure_destroy_sample();
+    al_play_sample(
+        destroy_smp,    /* 音檔指標            */
+        0.1,            /* 左右平均音量        */
+        0.0,            /* 左右平衡 -1~+1      */
+        1.0,            /* 播放速度 (1=正常)   */
+        ALLEGRO_PLAYMODE_ONCE,
+        NULL            /* 不用取回實例指標    */
+    );
                 }
             }
         }
@@ -272,15 +281,6 @@ void Bead_update(Elements *self) {
             b->skill2_1 = ROUND + 7;
         }
     }
-    ensure_destroy_sample();
-    al_play_sample(
-        destroy_smp,    /* 音檔指標            */
-        0.1,            /* 左右平均音量        */
-        0.0,            /* 左右平衡 -1~+1      */
-        1.0,            /* 播放速度 (1=正常)   */
-        ALLEGRO_PLAYMODE_ONCE,
-        NULL            /* 不用取回實例指標    */
-    );
 }
 
 
