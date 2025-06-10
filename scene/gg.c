@@ -1,0 +1,46 @@
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
+#include <allegro5/allegro_font.h>
+#include <allegro5/allegro_ttf.h>
+#include "gg.h"
+#include <stdbool.h>
+/*
+   [gg function]
+*/
+Scene *New_Gg(int label)
+{
+    Gg *pDerivedObj = (Gg *)malloc(sizeof(Gg));
+    Scene *pObj = New_Scene(label);
+    pObj->pDerivedObj = pDerivedObj;
+    pDerivedObj->gg = al_load_bitmap("assets/image/gg.JPG");
+    // setting derived object function
+    pObj->Update = gg_update;
+    pObj->Draw = gg_draw;
+    pObj->Destroy = gg_destroy;
+    return pObj;
+}
+void gg_update(Scene *self)
+{
+    ALLEGRO_KEYBOARD_STATE key_state;
+    al_get_keyboard_state(&key_state);
+
+    // 按 ESC 回主選單
+    if (al_key_down(&key_state, ALLEGRO_KEY_ESCAPE)) {
+        self->scene_end = true;
+        window = 0; // 假設 0 是主選單
+    }
+}
+
+void gg_draw(Scene *self)
+{
+    Gg *Obj = ((Gg *)(self->pDerivedObj));
+    al_draw_bitmap(Obj->gg, 0, 0, 0);
+
+}
+void gg_destroy(Scene *self)
+{
+    Gg *Obj = ((Gg *)(self->pDerivedObj));
+    free(Obj);
+    free(self);
+}

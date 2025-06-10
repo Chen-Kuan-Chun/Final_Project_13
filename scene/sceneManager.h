@@ -8,6 +8,8 @@ typedef enum SceneType
     GameScene_L,
     Card_L,
     About_L,
+    Yy_L,
+    Gg_L,
     Defeat_L,
     Victory_L
 } SceneType;

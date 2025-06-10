@@ -35,7 +35,9 @@ extern ALLEGRO_EVENT event;
 extern ALLEGRO_TIMER *fps;
 
 extern bool debug_mode;
+extern bool OVER;
 extern int COUNT;
+extern int RECOVER;
 
 
 // ✅ 滑鼠追蹤變數

@@ -18,6 +18,8 @@ typedef struct _Bead {
     int type;
     int row, col;          // ✅ 加上這兩行
     int round;
+    int round2;
+    int atk;
     int recovery;
     int skill1_1;
     int skill1_2;

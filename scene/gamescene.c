@@ -14,6 +14,7 @@
 #include "../shapes/Rectangle.h"
 #include "../shapes/Shape.h"
 #include "../element/draw.h"
+#include "../element/boss.h"
 /*
    [GameScene function]
 */
@@ -35,16 +36,17 @@ Scene *New_GameScene(int label)
     //_Register_elements(pObj, New_Tree(Tree_L));
     //_Register_elements(pObj, New_Character(Character_L));
     Generate_Bead_Grid(pObj);
-    _Register_elements(pObj, New_Boss1(Boss1_L));
-    _Register_elements(pObj, New_DamageInput(DamageInput_L));
-    _Register_elements(pObj, New_BlackLine(BlackLine_L));
-    _Register_elements(pObj, New_MatchManager(MatchMgr_L));
+    // _Register_elements(pObj, New_Boss1(Boss1_L));
+    // _Register_elements(pObj, New_DamageInput(DamageInput_L));
+    // _Register_elements(pObj, New_BlackLine(BlackLine_L));
+    // _Register_elements(pObj, New_MatchManager(MatchMgr_L));
     _Register_elements(pObj, New_Draw(Draw_L));
-
+    _Register_elements(pObj, New_Boss(Boss_L));
     // setting derived object function
     pObj->Update = game_scene_update;
     pObj->Draw = game_scene_draw;
     pObj->Destroy = game_scene_destroy;
+    OVER = false;
     return pObj;
 }
 
@@ -55,6 +57,8 @@ void game_scene_update(Scene *self)
     GameScene *gs = ((GameScene *)(self->pDerivedObj));
     ALLEGRO_MOUSE_STATE mouse_state;
     al_get_mouse_state(&mouse_state);
+    ALLEGRO_KEYBOARD_STATE key_state;
+    al_get_keyboard_state(&key_state);
     // update every element
     gs->mouse_back = (mouse_state.x >= 800 && mouse_state.x <= 900 &&
                                 mouse_state.y >= 50 && mouse_state.y <= 150);
@@ -62,8 +66,21 @@ void game_scene_update(Scene *self)
         if (gs->mouse_back) {
             self->scene_end = true;
             ROUND = 1;
+            RECOVER = 0;
             window = 0;
         }
+    }
+    if (al_key_down(&key_state, ALLEGRO_KEY_N)) {
+        COUNT += 50;
+        al_rest(0.2);
+    }
+    if (COUNT >= 150 || al_key_down(&key_state, ALLEGRO_KEY_V)) {
+        self->scene_end = true;
+        window = 4;
+    }
+    if (OVER || al_key_down(&key_state, ALLEGRO_KEY_D)) {
+        self->scene_end = true;
+        window = 5;
     }
     ElementVec allEle = _Get_all_elements(self);
     for (int i = 0; i < allEle.len; i++)
@@ -89,7 +106,7 @@ void game_scene_draw(Scene *self)
 {
     al_clear_to_color(al_map_rgb(0, 0, 0));
     GameScene *gs = ((GameScene *)(self->pDerivedObj));
-    if(ROUND > 10){
+    if(COUNT >= 50){
         al_draw_bitmap(gs->background2, 0, 0, 0);
     }else{
         al_draw_bitmap(gs->background1, 0, 0, 0);
