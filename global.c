@@ -14,6 +14,7 @@ ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_EVENT event;
 ALLEGRO_TIMER *fps = NULL;
 bool debug_mode = false;
+extern int COUNT = 0;
 
 // ✅ 滑鼠狀態初始化
 int global_mouse_x = 0;

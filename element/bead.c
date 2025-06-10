@@ -28,6 +28,7 @@ Elements *New_Bead(int label, int col, int row, int type) {
     Elements *pObj = New_Elements(label);
 
     pDerivedObj->font1 = al_load_ttf_font("assets/font/DIN Condensed Bold.ttf", 24, 0);
+    pDerivedObj->bk = al_load_bitmap("assets/image/break.png");
     pDerivedObj->x = get_grid_cx(col);
     pDerivedObj->y = get_grid_cy(row);
     pDerivedObj->w = 67;
@@ -45,6 +46,7 @@ Elements *New_Bead(int label, int col, int row, int type) {
     pDerivedObj->bead_start_time = al_get_time() - 5;  // 轉珠開始的時間
     pDerivedObj->bead_time_limit = 5.0;     
     pDerivedObj->now = al_get_time();
+    pDerivedObj->destroyed = false;
     pObj->pDerivedObj = pDerivedObj;
 
     pObj->Update = Bead_update;
@@ -78,8 +80,29 @@ void Generate_Bead_Grid(Scene *scene) {
   /*for (int c = 0; c < 6; c++) {
     if (bead_grid[r][c])
       Draw_Bead(bead_grid[r][c]);*/
-
-
+        }
+    }
+    COUNT = 1;
+    while(COUNT){
+        COUNT = 0;
+        for (int r = 0; r < GRID_ROWS; r++) {
+            for (int c = 0; c < GRID_COLS; c++) {
+                if (bead_grid[r][c]) {
+                    check_match(bead_grid[r][c]);
+                }
+            }
+        }
+        for (int r = 0; r < GRID_ROWS; r++) {
+            for (int c = 0; c < GRID_COLS; c++) {
+                Bead* b = bead_grid[r][c];
+                if (b && b->destroyed) {
+                    // 這裡可以依你需求換成你要的轉換邏輯：
+                    b->type = rand() % 4; // 假設 NUM_TYPES 是總種類數
+                    b->img = bead_imgs[b->type];
+                    b->destroyed = false; // 清除標記
+                    COUNT++;
+                }
+            }
         }
     }
 }
@@ -170,11 +193,31 @@ void Bead_update(Elements *self) {
         b->click = false;
     }
     else if (!mouse_down && dragging_bead)//玩家剛剛拖了一顆珠子，現在放開了滑鼠
-     {
+    {
         move_bead_to(dragging_bead, last_grid_row, last_grid_col);
         dragging_bead = NULL;
         b->click = false;
         ROUND ++;
+        COUNT = 0;
+        for (int r = 0; r < GRID_ROWS; r++) {
+            for (int c = 0; c < GRID_COLS; c++) {
+                if (bead_grid[r][c]) {
+                    check_match(bead_grid[r][c]);
+                }
+            }
+        }
+        for (int r = 0; r < GRID_ROWS; r++) {
+            for (int c = 0; c < GRID_COLS; c++) {
+                Bead* b = bead_grid[r][c];
+                if (b && b->destroyed) {
+                    // 這裡可以依你需求換成你要的轉換邏輯：
+                    b->type = rand() % 4; // 假設 NUM_TYPES 是總種類數
+                    b->img = bead_imgs[b->type];
+                    b->destroyed = false; // 清除標記
+                    COUNT++;
+                }
+            }
+        }
     }
     mouse_was_down = mouse_down;
     if((b->skill1_1 - ROUND)<= 0){
@@ -253,4 +296,33 @@ void Bead_destory(Elements *self) {
     free(obj->hitbox);
     free(obj);
     free(self);
+}
+
+void check_match(Bead* b) {
+    if (!b) return;
+    int r = b->row;
+    int c = b->col;
+    int t = b->type;
+
+    // 檢查右邊兩顆是否和本身一樣
+    if (c + 2 < GRID_COLS) {
+        Bead* b1 = bead_grid[r][c + 1];
+        Bead* b2 = bead_grid[r][c + 2];
+        if (b1 && b2 && b1->type == t && b2->type == t) {
+            b->destroyed = true;
+            b1->destroyed = true;
+            b2->destroyed = true;
+        }
+    }
+
+    // 檢查下方兩顆是否和本身一樣
+    if (r + 2 < GRID_ROWS) {
+        Bead* b1 = bead_grid[r + 1][c];
+        Bead* b2 = bead_grid[r + 2][c];
+        if (b1 && b2 && b1->type == t && b2->type == t) {
+            b->destroyed = true;
+            b1->destroyed = true;
+            b2->destroyed = true;
+        }
+    }
 }

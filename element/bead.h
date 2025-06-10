@@ -30,11 +30,13 @@ typedef struct _Bead {
     ALLEGRO_FONT *font1;
     bool recovery_add;
     ALLEGRO_BITMAP *img;
+    ALLEGRO_BITMAP *bk;
     Shape *hitbox;
     double bead_start_time;  // 轉珠開始的時間點
     double bead_time_limit;  // 轉珠限制秒數，比如5秒
     double now;
     bool click;
+    bool destroyed;
 } Bead;
 
 
@@ -44,6 +46,7 @@ void Bead_update(Elements *self);
 void Bead_interact(Elements *self);
 void Bead_draw(Elements *self);
 void Bead_destory(Elements *self);
+void check_match(Bead* b);
 
 // 產生 5x6 隨機 Bead
 // 原本
