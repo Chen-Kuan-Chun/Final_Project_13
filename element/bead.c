@@ -306,7 +306,7 @@ void Bead_draw(Elements *self) {
     if((obj->now - obj->bead_start_time < 5) && obj->click){
         al_draw_filled_rectangle(240, 275, (obj->bead_start_time - obj->now + obj->bead_time_limit)*80 + 240, 290, al_map_rgb(250, 255, 100));//條寬 = 剩餘時間 × 80 像素
         //前提是：正在點擊 (obj->click == true) 且拖曳還在 5 秒內
-    }if(((ROUND-1)/3 - obj->recovery) <= 4){
+    }if(((ROUND-1)/3 - obj->recovery - (RECOVER/3)) <= 4){
         al_draw_filled_rectangle(240, 290, 640 - ((ROUND-1)/3 - obj->recovery - (RECOVER/3))*100, 305, al_map_rgb(255, 192, 203));
     }
     if((4 - (ROUND-1)/3 + obj->recovery + (RECOVER/3)) <= 0){

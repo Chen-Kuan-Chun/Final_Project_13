@@ -137,6 +137,12 @@ bool game_update(Game *self)
         case 3:
             create_scene(About_L);
             break;
+        case 4:
+            create_scene(Yy_L);
+            break;
+        case 5:
+            create_scene(Gg_L);
+            break;
         case -1:
             return false;
         default:

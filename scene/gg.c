@@ -35,7 +35,12 @@ void gg_update(Scene *self)
 void gg_draw(Scene *self)
 {
     Gg *Obj = ((Gg *)(self->pDerivedObj));
-    al_draw_bitmap(Obj->gg, 0, 0, 0);
+    al_draw_scaled_bitmap(
+        Obj->gg,
+        0, 0, al_get_bitmap_width(Obj->gg), al_get_bitmap_height(Obj->gg),
+        0, 0, WIDTH, HEIGHT,
+        0
+    );
 
 }
 void gg_destroy(Scene *self)

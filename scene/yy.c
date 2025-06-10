@@ -35,7 +35,12 @@ void yy_update(Scene *self)
 void yy_draw(Scene *self)
 {
     Yy *Obj = ((Yy *)(self->pDerivedObj));
-    al_draw_bitmap(Obj->yy, 0, 0, 0);
+    al_draw_scaled_bitmap(
+        Obj->yy,
+        0, 0, al_get_bitmap_width(Obj->yy), al_get_bitmap_height(Obj->yy),
+        0, 0, WIDTH, HEIGHT,
+        0
+    );
 }
 void yy_destroy(Scene *self)
 {
