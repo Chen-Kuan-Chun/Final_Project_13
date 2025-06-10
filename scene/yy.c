@@ -59,6 +59,8 @@ void yy_draw(Scene *self)
 void yy_destroy(Scene *self)
 {
     Yy *Obj = ((Yy *)(self->pDerivedObj));
+    al_destroy_sample(Obj->song);
+    al_destroy_sample_instance(Obj->sample_instance);
     free(Obj);
     free(self);
 }

@@ -59,6 +59,8 @@ void gg_draw(Scene *self)
 void gg_destroy(Scene *self)
 {
     Gg *Obj = ((Gg *)(self->pDerivedObj));
+    al_destroy_sample(Obj->song);
+    al_destroy_sample_instance(Obj->sample_instance);
     free(Obj);
     free(self);
 }
