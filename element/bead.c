@@ -8,6 +8,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_audio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
@@ -18,6 +19,15 @@ Bead* dragging_bead = NULL;
 int dragging_row, dragging_col;
 int last_grid_row, last_grid_col;
 bool mouse_was_down = false;
+
+static ALLEGRO_SAMPLE *destroy_smp = NULL;   /* 只存指標，不要重複載入 */
+
+static void ensure_destroy_sample(void)
+{
+    al_reserve_samples(32);
+    destroy_smp = al_load_sample("assets/sound/destroy.wav");
+    GAME_ASSERT(destroy_smp, "Failed to load destroy.wav");
+}
 
 static float get_grid_cx(int col) { return col * 72 + 230; }
 static float get_grid_cy(int row) { return row * 72 + 300; }
@@ -225,6 +235,15 @@ void Bead_update(Elements *self) {
                     b->type = rand() % 4; // 假設 NUM_TYPES 是總種類數
                     b->img = bead_imgs[b->type];
                     b->destroyed = false; // 清除標記
+                    ensure_destroy_sample();
+    al_play_sample(
+        destroy_smp,    /* 音檔指標            */
+        0.1,            /* 左右平均音量        */
+        0.0,            /* 左右平衡 -1~+1      */
+        2.0,            /* 播放速度 (1=正常)   */
+        ALLEGRO_PLAYMODE_ONCE,
+        NULL            /* 不用取回實例指標    */
+    );
                 }
             }
         }
